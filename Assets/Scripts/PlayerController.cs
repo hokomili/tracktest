@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(movement * currentSpeed, ForceMode.Acceleration);
         }
         else{
-            rb.AddForce(transform.forward * currentSpeed, ForceMode.Acceleration);
+            rb.AddForce(transform.forward * Input.GetAxis("Vertical") * currentSpeed, ForceMode.Acceleration);
         }
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(transform.eulerAngles.x, cam.eulerAngles.y+ currentRotate, transform.eulerAngles.z), Time.deltaTime * 10f);
         //Gravity
