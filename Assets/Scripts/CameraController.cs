@@ -6,12 +6,13 @@ public class CameraController : MonoBehaviour
 {
      public Transform target;
      public float distance = 10.0f;
+     public float height=1.0f;
      public float sensitivity = 3.0f;
      
      private Vector3 offset; 
      
      void Start ()  {
-         offset = (transform.position - target.position).normalized * distance;
+         offset = (transform.position - target.position).normalized * distance+new Vector3(0,height,0);
          transform.position = target.position + offset;
      }
      

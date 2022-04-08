@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float currentSpeed;
     float speed;
-    float rotate, currentRotate;
+    float rotate;
+    [SerializeField] float currentRotate;
     int driftDirection;
     float driftPower;
     public float driftSpeed;
@@ -42,13 +43,7 @@ public class PlayerController : MonoBehaviour
                 speed+=currentSpeed*driftSpeed/3;
                 driftPower-=1;
             }
-        //steer?
-        if (Input.GetAxis("Horizontal") != 0)
-        {
-            int dir = Input.GetAxis("Horizontal") > 0 ? 1 : -1;
-            float amount = Mathf.Abs(inputDirection.x);
-            Steer(dir, amount);
-        }
+        
         //drift?
         if (Input.GetButtonDown("Jump") && !drifting && Input.GetAxis("Horizontal") != 0)
         {
@@ -59,7 +54,14 @@ public class PlayerController : MonoBehaviour
             //playerModel.parent.DOPunchPosition(transform.up * .2f, .3f, 5, 1);psa
 
         }
-
+        //steer?
+        if (Input.GetAxis("Horizontal") != 0&&!drifting)
+        {
+            int dir = Input.GetAxis("Horizontal") > 0 ? 1 : -1;
+            float amount = Mathf.Abs(inputDirection.x);
+            Steer(dir, amount*2);
+        }
+        
         if (drifting)
         {
             float control = (driftDirection == 1) ? Remap(Input.GetAxis("Horizontal"), -1, 1, 0, 2) : Remap(Input.GetAxis("Horizontal"), -1, 1, 2, 0);
@@ -74,19 +76,18 @@ public class PlayerController : MonoBehaviour
             //Boost();
             drifting=false;
         }
-        currentSpeed = Mathf.SmoothStep(currentSpeed, speed, Time.deltaTime * 12f); speed = 0f;
-        currentRotate = Mathf.Lerp(currentRotate, rotate, Time.deltaTime * 4f); rotate = 0f;
+        
         //Animations    
 
         //a) Kart
         if (!drifting)
         {
-            playerModel.localEulerAngles = Vector3.Lerp(playerModel.localEulerAngles, new Vector3(0, 90 + (Input.GetAxis("Horizontal") * 15), playerModel.localEulerAngles.z), .2f);
+            playerModel.localEulerAngles = Vector3.Lerp(playerModel.localEulerAngles, new Vector3(0, 90 + (Input.GetAxis("Horizontal") * 15), playerModel.localEulerAngles.z), 10f/Time.deltaTime);
         }
         else
         {
             float control = (driftDirection == 1) ? Remap(Input.GetAxis("Horizontal"), -1, 1, .5f, 2) : Remap(Input.GetAxis("Horizontal"), -1, 1, 2, .5f);
-            playerModel.parent.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(playerModel.parent.localEulerAngles.y,(control * 15) * driftDirection, .2f), 0);
+            //playerModel.parent.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(playerModel.parent.localEulerAngles.y,(control * 15) * driftDirection, .2f), 0);
         }
         /*
         //b) Wheels
@@ -100,7 +101,6 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate ()
     {
-        
         // CHANGED -- This limits movement speed so you won't move faster when holding a diagonal. It's just a pet peeve of mine
         Vector2 inputDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         if(inputDirection.sqrMagnitude > 1)
@@ -123,12 +123,13 @@ public class PlayerController : MonoBehaviour
         else{
             rb.AddForce(transform.forward * Input.GetAxis("Vertical") * currentSpeed, ForceMode.Acceleration);
         }
-        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(transform.eulerAngles.x, cam.eulerAngles.y+ currentRotate, transform.eulerAngles.z), Time.deltaTime * 10f);
+        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(transform.eulerAngles.x, cam.eulerAngles.y+ currentRotate, transform.eulerAngles.z), 10f/Time.deltaTime);
         //Gravity
         rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
         //Steering
-        
+        currentSpeed = Mathf.SmoothStep(currentSpeed, speed,12f/Time.deltaTime); speed = 0f;
+        currentRotate = Mathf.Lerp(currentRotate, rotate,4f/Time.deltaTime); rotate = 0f;
 
         RaycastHit hitOn;
         RaycastHit hitNear;
@@ -165,7 +166,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Steer(int direction, float amount)
     {
-        rotate = (steering * direction) * amount;
+        rotate = (steering * direction) * amount*3;
     }
     private void Speed(float x)
     {
