@@ -1400,7 +1400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1261118694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15164,6 +15164,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: cubegirl
       objectReference: {fileID: 0}
+    - target: {fileID: 1094305755175539417, guid: abe946a6443a3b84297ab0272343e877,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abe946a6443a3b84297ab0272343e877, type: 3}
 --- !u!1001 &941408758355734867
@@ -15177,6 +15182,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 131140499044152971, guid: 1f705144f0e133843bf3ea36c7618445,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 763983810508483633, guid: 1f705144f0e133843bf3ea36c7618445,
         type: 3}
