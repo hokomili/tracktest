@@ -21,7 +21,7 @@ public class GameStartManager : MonoBehaviour
     [Range(1,60)]
     public int timerfps=25;
     float tiem;
-    bool nextrow=true;
+    bool nextrow=false;
     void Start()
     {
         timer.GetComponent<TextMeshProUGUI>().text="00:00:00";
@@ -57,10 +57,10 @@ public class GameStartManager : MonoBehaviour
             }
             timer.GetComponent<TextMeshProUGUI>().text=a+":"+b+":"+c;
         }
-        if(!nextrow&&cp.GetComponent<CheckpointController>().Checkpoints[lastcp].gameObject.activeSelf==false){
+        if(!nextrow&&cp.GetComponent<CheckpointController>().Checkpoints[lastcp].gameObject.activeSelf==true){
             nextrow=true;
         }
-        if(nextrow&&cp.GetComponent<CheckpointController>().Checkpoints[lastcp].gameObject.activeSelf==true){
+        if(nextrow&&cp.GetComponent<CheckpointController>().Checkpoints[lastcp+1].gameObject.activeSelf==true){
             nextrow=false;
             rowcount++;
             row.GetComponent<TextMeshProUGUI>().text=rowcount.ToString();
